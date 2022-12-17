@@ -127,9 +127,9 @@
 					)}</i></b> soon.`;
 				} else {
 					document.getElementById("destination").innerHTML =
-						params.destination.replace("_", " ") ?? "Unknown";
+						params.destination?.replace("_", " ") ?? "Unknown";
 					document.getElementById("origin").innerHTML =
-						params.origin.replace("_", " ") ?? "Unknown";
+						params.origin?.replace("_", " ") ?? "Unknown";
 				}
 			}
 			function init() {
