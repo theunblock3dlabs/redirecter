@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Please wait 5 seconds...</title>
+		<style>
+			@import url("https://fonts.googleapis.com/css2?family=Rubik&display=swap");
+
+			* {
+				font-family: "Rubik", sans-serif;
+			}
+			body {
+				margin: 0 0;
+			}
+			#top {
+				overflow: hidden;
+				background-color: #d0d0d0;
+				border-bottom-left-radius: 22.5px;
+				border-bottom-right-radius: 22.5px;
+				padding: 10px;
+			}
+			#destText {
+				text-align: center;
+				margin: 0 0;
+				margin-bottom: 10px;
+			}
+			#skip {
+				margin: 0;
+				position: relative;
+				left: 50%;
+				-ms-transform: translate(-50%, 0);
+				transform: translate(-50%, 0);
+				min-width: 12.5%;
+				font-size: large;
+			}
+
+			#skip {
+				border-color: #b0b0b0;
+				border-style: solid;
+				border-radius: 12px;
+				padding: 7.5px;
+				color: #000;
+				background-color: #fff;
+			}
+			#skip:disabled {
+				color: rgb(66, 66, 66);
+				background-color: rgb(194, 194, 194);
+				cursor: not-allowed;
+			}
+			#skip:hover:not(:disabled) {
+				background-color: #f0f0f0;
+				cursor: pointer;
+			}
+			#explaination {
+				text-align: center;
+				font-size: 15px;
+				color: rgb(66, 66, 66);
+			}
+		</style>
+	</head>
+	<body onload="init()">
+		<div id="top">
+			<p id="destText">
+				You are going to: <b><i id="destination"></i></b>, from:
+				<b><i id="origin"></i></b>
+			</p>
+			<button id="skip" disabled>Please wait 5 seconds...</button>
+			<p id="explaination">
+				<b>How It Works:</b><br />In the 5 seconds that you wait, you are
+				presented multiple ads. These ads help us make money, which helps us
+				develop the site!
+			</p>
+		</div>
+		<script>
+			const params = new Proxy(new URLSearchParams(window.location.search), {
+				get: (searchParams, prop) => searchParams.get(prop),
+			});
+			const locations = {
+				Math_Labs: "https://sites.google.com/view/mathlabs",
+				Cyber_City: "https://sites.google.com/view/cyberlabs",
+				Teleport_Hub: "https://sites.google.com/view/teleport-hub",
+			};
+			function changeButtonCountdown(to) {
+				let btn = document.getElementById("skip");
+				btn.innerHTML = `Please wait ${to} seconds...`;
+				document.title = `Please wait ${to} seconds...`;
+				if (to == 0) {
+					btn.disabled = false;
+					btn.innerHTML = "Continue";
+					btn.onclick = function () {
+						location.href = locations[params.destination];
+					};
+				}
+				console.log(to);
+			}
+			function startCountdown(seconds) {
+				console.log("START");
+				for (let i = 0; i < seconds; i++) {
+					setTimeout(changeButtonCountdown, 1000 * (i + 1), 5 - (i + 1));
+				}
+			}
+			function changeBasedOnQuery() {
+				if (params.origin == "Support") {
+					document.getElementById(
+						"destText"
+					).innerHTML = `Thanks for supporting us! You will arrive at <b><i id="destination">${params.destination.replace(
+						"_",
+						" "
+					)}</i></b> soon.`;
+				} else {
+					document.getElementById("destination").innerHTML =
+						params.destination.replace("_", " ") ?? "Unknown";
+					document.getElementById("origin").innerHTML =
+						params.origin.replace("_", " ") ?? "Unknown";
+				}
+			}
+			function init() {
+				startCountdown(5);
+				changeBasedOnQuery();
+			}
+		</script>
+	</body>
+</html>
